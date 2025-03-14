@@ -1,0 +1,28 @@
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+ARG PYTHON_VERSION="3.12"
+ARG PYTHON_ENV_NAME="fastapi_toyproject_4"
+ARG TARGET_WORKDIR="fastapi_toyproject_4"
+
+RUN apt-get update && apt-get install -y \
+    wget curl git tzdata \
+    && ln -fs /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p /opt/miniconda && rm miniconda.sh
+
+ENV PATH="/opt/miniconda/bin:$PATH"
+
+RUN conda create --name ${PYTHON_ENV_NAME} python=${PYTHON_VERSION} -y && \
+    conda init bash && \
+    echo "conda activate ${PYTHON_ENV_NAME}" >> ~/.bashrc
+
+RUN ln -sf /opt/miniconda/envs/${PYTHON_ENV_NAME}/bin/python3 /usr/bin/python3
+
+WORKDIR /${TARGET_WORKDIR}
+COPY . .
+RUN conda run -n ${PYTHON_ENV_NAME} pip install --no-cache-dir -r requirements.txt
+
+CMD ["/bin/bash"]
