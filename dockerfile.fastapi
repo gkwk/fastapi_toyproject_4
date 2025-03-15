@@ -1,13 +1,15 @@
 FROM python:3.12-slim
 
-WORKDIR /code
+WORKDIR /src
 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.txt /src/requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /src/requirements.txt
 
-COPY ./app /code/app
+COPY ./app_fastapi /src/app_fastapi
+COPY ./app_database_redis /src/app_database_redis
+COPY ./app_database_postgresql /src/app_database_postgresql
+COPY ./app_database_mongodb /src/app_database_mongodb
+COPY ./commons /src/commons
 
-RUN chmod +x /code/app/app_init.sh
-
-WORKDIR /code/app
+CMD ["python", "run_app_fastapi.py"]

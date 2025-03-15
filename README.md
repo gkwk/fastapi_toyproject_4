@@ -34,11 +34,18 @@
 
 # Dev환경 세팅
 
+- Docker 이미지 빌드
 ``` bash
 docker build -t fastapi_toyproject_4_dev:latest . -f dockerfile.dev_env_arm
 docker build -t fastapi_toyproject_4_dev:latest . -f dockerfile.dev_env_x86_64
 ```
 
+- Docker 컨테이너 생성
 ``` bash
 docker run -it --name fastapi_toyproject_4_dev_container -p 127.0.0.1:9000:8000 fastapi_toyproject_4_dev:latest
+```
+
+- Git Hooks 적용
+```bash
+pre-commit install
 ```
