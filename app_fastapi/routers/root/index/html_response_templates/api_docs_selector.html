@@ -1,0 +1,36 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ app_title }}{% endblock %}
+
+{% block content %}
+<header>
+    <h1>{{ app_title }}</h1>
+    <p class="subtitle">{{ app_description }}</p>
+</header>
+
+<div class="api-list">
+    <h2 class="section-title">API 버전 목록</h2>
+    
+    {% if servers %}
+        {% for server in servers %}
+        <div class="api-card">
+            <div class="api-header">
+                <div class="api-title">{{ server.description or 'API version.' ~ loop.index }}</div>
+                <div class="api-version">{{ server.version or '버전 정보 없음' }}</div>
+            </div>
+            <p class="api-description">
+                {{ server.extended_description or '이 버전의 API 문서를 확인하려면 아래 버튼을 클릭하세요.' }}
+            </p>
+            <div class="button-group">
+                <a href="{{ server.url }}" class="btn btn-primary">Swagger</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-message">
+            <p>제공가능한 API Docs가 없습니다!!!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
