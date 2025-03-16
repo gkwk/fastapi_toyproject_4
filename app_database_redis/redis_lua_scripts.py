@@ -27,3 +27,31 @@ redis.call('EXPIRE', ip_key, window_seconds + 10)
 -- 결과 반환
 return is_allowed
 """
+
+
+OSCILLATOR_LUA_SCRIPT = """
+local key = KEYS[1]
+local direction_key = KEYS[2]
+local current = tonumber(redis.call('GET', key) or '0')
+local direction = tonumber(redis.call('GET', direction_key) or '1')  -- 1: 증가, -1: 감소
+
+-- 현재 방향에 따라 값을 증가 또는 감소
+current = current + direction
+
+-- 방향 전환 조건 확인
+if current >= 10 and direction == 1 then
+    -- 10 이상이고 증가 중이면 감소로 전환
+    direction = -1
+    redis.call('SET', direction_key, direction)
+elseif current < 0 and direction == -1 then
+    -- 0 미만이고 감소 중이면 증가로 전환
+    direction = 1
+    current = 0  -- 0 미만이 되지 않도록 조정
+    redis.call('SET', direction_key, direction)
+end
+
+-- 현재 값 저장
+redis.call('SET', key, current)
+
+return current
+"""
