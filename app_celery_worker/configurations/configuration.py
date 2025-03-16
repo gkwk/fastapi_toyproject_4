@@ -31,7 +31,12 @@ class Settings(BaseSettings):
 
     CELERY_ASYNC_QUEUE_TEST_TASK_NAME: str
 
+    CELERY_BROKER_PATH_URL: str = ""
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", use_enum_values=True)
+
+    def model_post_init(self, __context) -> None:
+        self.CELERY_BROKER_PATH_URL = f"redis://{self.REDIS_HOST_NAME}:{self.REDIS_PORT}/0"
 
 
 @lru_cache
@@ -39,5 +44,4 @@ def get_settings() -> Settings:
     return Settings()
 
 
-origins: list[str] = ["*"]
 BASE_PATH: Path = Path().resolve()

@@ -3,7 +3,7 @@ from typing import Any, AsyncGenerator
 from redis.asyncio import Redis
 
 from app_database_redis.configurations.configuration import get_settings
-from app_database_redis.redis_lua_scripts import CHECK_RATE_LIMIT_LUA_SCRIPT
+from app_database_redis.redis_lua_scripts import CHECK_RATE_LIMIT_LUA_SCRIPT, OSCILLATOR_LUA_SCRIPT
 
 
 class RedisHandlerAsync:
@@ -70,5 +70,14 @@ class RedisHandlerAsync:
             request_id,
             window_seconds,
             max_requests,
+        )
+        return result
+
+    async def oscillator(self):
+        result = await self._client.eval(
+            OSCILLATOR_LUA_SCRIPT,
+            2,
+            "oscillator_value",
+            "oscillator_direction",
         )
         return result
