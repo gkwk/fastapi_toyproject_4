@@ -23,12 +23,13 @@ class Settings(BaseSettings):
 
     MONGODB_PORT: int
     MONGODB_HOST_NAME: str
+    MONGODB_DB_NAME: str
 
     RABBITMQ_PORT: int
     RABBITMQ_USERNAME: str
     RABBITMQ_PASSWORD: str
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore", use_enum_values=True)
 
 
 @lru_cache

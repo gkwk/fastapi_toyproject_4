@@ -1,0 +1,1 @@
+from .mongodb_data_wrappers import MongoDBCollectionName

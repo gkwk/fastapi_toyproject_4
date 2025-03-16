@@ -1,1 +1,2 @@
-from commons.enums.app_enviroment_type import AppEnviromentType
+from .app_enviroment_type import AppEnviromentType
+from .mongodb_collection_name import MongoDBCollectionName
