@@ -31,7 +31,6 @@ services:
       timeout: 30s
       retries: 30
     environment:
-      - RDBMS_DRIVER=${RDBMS_DRIVER}
       - RDBMS_HOST_NAME=${RDBMS_HOST_NAME}
       - RDBMS_USERNAME=${RDBMS_USERNAME}
       - RDBMS_PASSWORD=${RDBMS_PASSWORD}

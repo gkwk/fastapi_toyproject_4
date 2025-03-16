@@ -4,6 +4,7 @@
 - FastAPI기반 API 서버를 구축한다.
 - 비동기 라이브러리와 함수를 적극적으로 사용한다.
 - PostgreSQL을 사용한다.
+- 프로젝트 진행간 불편사항을 개선해볼 수 있는 구조 혹은 코드를 작성한다.
 
 # 구현 목표
 
@@ -46,6 +47,13 @@ docker run -it --name fastapi_toyproject_4_dev_container -p 127.0.0.1:9000:8000 
 ```
 
 - Git Hooks 적용
-```bash
+``` bash
 pre-commit install
+```
+
+- DB 초기화
+``` bash
+alembic init ./app_database_postgresql/alembic_migrations -t /fastapi_toyproject_4/app_database_postgresql/alembic_template/postgresql_async
+alembic revision --autogenerate -m 'init'
+alembic upgrade heads
 ```
