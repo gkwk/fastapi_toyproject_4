@@ -28,7 +28,12 @@ class Settings(BaseSettings):
     RABBITMQ_USERNAME: str
     RABBITMQ_PASSWORD: str
 
+    RDB_PATH_URL: str = ""
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    def model_post_init(self, __context) -> None:
+        self.RDB_PATH_URL = f"postgresql+asyncpg://{self.RDBMS_USERNAME}:{self.RDBMS_PASSWORD}@{self.RDBMS_HOST_NAME}:{self.RDBMS_PORT}/{self.RDBMS_DB_NAME}"
 
 
 @lru_cache
@@ -36,5 +41,13 @@ def get_settings() -> Settings:
     return Settings()
 
 
-origins: list[str] = ["*"]
 BASE_PATH: Path = Path().resolve()
+
+
+rdbms_naming_convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
+}
